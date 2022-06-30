@@ -118,20 +118,7 @@ const questions = [ {
     type: "list",
     name: "license",
     message: "Select a license for your project:",
-    choices: [
-        'Apache License 2.0',
-        'Boost Software License',
-        'CC-BY-4.0',
-        'CC-BY-SA-4.0',
-        'CCO-1.0',
-        'GNU GPLv2',
-        'GNU GPLv3',
-        'ISC',
-        'MIT',
-        'Mozilla Public License 2.0',
-        'SIL Open Font License 1.1',
-        'The Unlicense'
-    ],
+    choices: ["None", "MIT", "GNU GPLv3", "MPL 2.0"],
     when: ({ confirmLicense }) => {
         if (confirmLicense) {
         return true;
@@ -144,10 +131,22 @@ const questions = [ {
 ];
 
 // TODO: Create a function to write README file
-function writeToFile(fileName, data) { }
+function writeToFile(fileName, data) {
+    fs.writeFile(fileName, data, (err) => {
+        if (err)
+            throw err;
+        console.log('Information transferred to the README!')
+    });
+};
 
 // TODO: Create a function to initialize app
-function init() { }
+function init() {
+    inquirer.prompt(questions)
+    .then(function (userInput) {
+        console.log(userInput)
+        writeToFile("README.md", generateMarkdown(userInput));
+    });
+};
 
 // Function call to initialize app
 init();
